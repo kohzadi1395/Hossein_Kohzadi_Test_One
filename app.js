@@ -25,7 +25,7 @@ app.get('/greeting',(req,res)=> {
 	res.send({hi:'here'});
 });
 app.get('/',(req,res)=> {
-	res.send({hi:'there'});
+	res.send({hi:'Sweetheart'});
 });
 
 app.get('/getBooks',(req,res,next)=>{
