@@ -28,7 +28,7 @@ app.get('/',(req,res)=> {
 	res.send({hi:'Sweetheart'});
 });
 
-app.get('/getBooks',(req,res,next)=>{
+app.get('/getBooks/:subject',(req,res,next)=>{
 const subject=req.params.subject;
 for(let book of books){
    if( book.subject===subject){
