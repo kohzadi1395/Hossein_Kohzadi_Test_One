@@ -30,12 +30,22 @@ app.get('/',(req,res)=> {
 
 app.get('/getBooks/:subject',(req,res,next)=>{
 const subject=req.params.subject;
-for(let book of books){
+console.log(subject);
+const book=books.find(c=>c.subject===subject);
+if(!book)
+{
+	res.status(404).send('book not find');
+}
+else
+{
+	res.json(book);
+}
+/*for(let book of books){
    if( book.subject===subject){
 	res.json(book);
 	return;
       }
-    }
+    }*/
 });
 
 app.put('/updateBook',(req,res)=>{
