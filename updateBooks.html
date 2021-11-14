@@ -1,0 +1,17 @@
+<html>
+<script>
+const updateBook(oldSubject,newSubject)=>{
+      const xhttp= new XmlHttpRequest();
+      xhttp.open("GET","http://localhost:3000/getBooks/${oldSubject}/${newSubject}",false);
+      xhttp.send();
+}
+</script>
+<body>
+	<h1>Get book </h1> 
+	   Enter Old Subject of the book:
+	   <input name="oldSubject" type="text">
+	   Enter New Subject of the book:
+	   <input name="newSubject" type="text">
+	   <buttun onclick="updateBook">Submit</button>
+</body>
+</html>

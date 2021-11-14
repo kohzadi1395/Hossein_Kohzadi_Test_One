@@ -1,0 +1,39 @@
+<html>
+<script>
+const updateBook(subject)=>{
+      const xhttp= new XmlHttpRequest();
+      xhttp.open("GET","http://localhost:3000/getBooks/${subject}",false);
+      xhttp.send();
+const books=Json.parse(xhttp.responseText);
+const {
+	 authorName,
+	 title,
+	 publisher,
+	 subject,
+	 datePublished
+
+}=book;
+
+    document.getElementById('authorName').value =book.authorName;
+    document.getElementById('title').value = book.title;
+    document.getElementById('publisher').value = book.publisher;
+    document.getElementById('subject').value = book.subject;
+    document.getElementById('datePublished').value = book.datePublished;
+
+</script>
+<body>
+	<h1>Get book </h1> 
+	   Enter Subject of the book:
+	   <input name="subject" type="text">
+	   <buttun onclick(subject)>Submit</button>
+
+<hr>
+<hr>
+	   <input id="authorName" type="text">
+	   <input id="title" type="text">
+	   <input id="publisher" type="text">
+	   <input id="subject" type="text">
+	   <input id="datePublished" type="text">
+
+</body>
+</html>
