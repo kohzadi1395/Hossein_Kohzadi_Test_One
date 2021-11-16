@@ -37,12 +37,6 @@ app.get('/getBooks/:subject', (req, res, next) => {
     } else {
         res.json(book);
     }
-    /*for(let book of books){
-       if( book.subject===subject){
-        res.json(book);
-        return;
-          }
-        }*/
 });
 
 app.put('/updateBook', (req, res) => {
@@ -58,10 +52,8 @@ app.put('/updateBook', (req, res) => {
 });
 
 app.post('/addBook', (req, res) => {
-    const schema = {
-		subject: Joi.string().min(3).required_
-    };
-    const newBook =Joi.validate(req.body,schema);
+
+    const newBook =req.body;
     books.push(newBook)
 });
 
