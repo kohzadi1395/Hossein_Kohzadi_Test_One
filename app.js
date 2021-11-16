@@ -16,6 +16,8 @@ const books = [
 
 ];
 const express = require("express");
+const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json();
 const app = express();
 const Port = process.env.PORT || 3000;
 app.listen(Port, () => {
@@ -51,11 +53,11 @@ app.put('/updateBook/:oldSubject/:newSubject', (req, res) => {
     }
 });
 
-app.post('/addBook', (req, res) => {
+app.post('/addBook',jsonParser, (req, res) => {
     const newBook = req.body;
-    console.log(newBook);
+    console.log( newBook);
+    books.push(newBook);
     res.json(newBook);
-    books.push(newBook)
 });
 
 app.get('/displayAllBooks', (req, res) => {
