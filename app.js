@@ -42,18 +42,18 @@ app.get('/getBooks/:subject', (req, res, next) => {
 app.put('/updateBook/:oldSubject/:newSubject', (req, res) => {
     const oldSubject = req.params.oldSubject;
     const newSubject = req.params.newSubject;
-    for (let book of books) {
-        if (book.subject === oldSubject) {
-            book.subject = newSubject;
-            res.json(book);
-            return;
-        }
+    const book = books.find(c => c.subject === oldSubject);
+    if (!book) {
+        res.status(404).send('book not find');
+    } else {
+        book.subject = newSubject;
+        res.json(book);
     }
 });
 
 app.post('/addBook', (req, res) => {
 
-    const newBook =req.body;
+    const newBook = req.body;
     books.push(newBook)
 });
 
