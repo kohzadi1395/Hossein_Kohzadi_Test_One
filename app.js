@@ -39,7 +39,7 @@ app.get('/getBooks/:subject', (req, res, next) => {
     }
 });
 
-app.put('/updateBook', (req, res) => {
+app.put('/updateBook/:oldSubject/:newSubject', (req, res) => {
     const oldSubject = req.params.oldSubject;
     const newSubject = req.params.newSubject;
     for (let book of books) {
