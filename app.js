@@ -52,8 +52,9 @@ app.put('/updateBook/:oldSubject/:newSubject', (req, res) => {
 });
 
 app.post('/addBook', (req, res) => {
-
     const newBook = req.body;
+    console.log(newBook);
+    res.json(newBook);
     books.push(newBook)
 });
 
