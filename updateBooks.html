@@ -67,15 +67,22 @@
             return;
         }
         // add data
-        $.post('/addTodo',{text: todoText, date: todoDate, title: todoTitle},function (data) {
+        $.post('/addTodo', {text: todoText, date: todoDate, title: todoTitle}, function (data) {
             model.todos.push(data);
-        }).fail((err)=>console.log(err));
+        }).fail((err) => console.log(err));
 
         $('#todo-text').val('');
         $('#todo-date').val('');
         $('#todo-title').val('');
 
     }
+
+    function gettodo() {
+        $.get('/getTodo', function (data) {
+            model.todos = data;
+        })
+            }
+    gettodo();
 </script>
 </body>
 
