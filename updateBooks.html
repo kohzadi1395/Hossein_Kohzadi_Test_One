@@ -67,7 +67,10 @@
             return;
         }
         // add data
-        model.todos.push({text: todoText, date: todoDate, title: todoTitle});
+        $.post('/addTodo',{text: todoText, date: todoDate, title: todoTitle},function (data) {
+            model.todos.push(data);
+        }).fail((err)=>console.log(err));
+
         $('#todo-text').val('');
         $('#todo-date').val('');
         $('#todo-title').val('');
