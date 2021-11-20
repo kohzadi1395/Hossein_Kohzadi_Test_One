@@ -1,20 +1,3 @@
-const books = [
-    {
-        "authorName": "Hossein",
-        "title": "Node.js",
-        "publisher": "Lambton",
-        "subject": "Web",
-        "datePublished": "2021/10/19"
-    },
-    {
-        "authorName": "Hossein",
-        "title": "Node.js II",
-        "publisher": "Lambton",
-        "subject": "Web Programing",
-        "datePublished": "2021/10/19"
-    }
-
-];
 const express = require("express");
 const bodyParser = require('body-parser');
 const path = require('path');
@@ -34,7 +17,7 @@ app.post('/addTodo', (req, res) => {
         res.status(400).send({message: 'text is required'});
 
     const jsonPath = path.resolve(__dirname, 'data/todos.json');
-    console.log(jsonPath);
+
     const savesTodos = fs.readFile(jsonPath, (err, data) => {
         if (err) {
             res.status(500).send(err);
@@ -54,11 +37,77 @@ app.post('/addTodo', (req, res) => {
     });
 });
 
+app.delete('/todos', (req, res) => {
+    const newTodo = req.body;
+    if (!newTodo)
+        res.status(400).send({message: 'text is required'});
+
+    const jsonPath = path.resolve(__dirname, 'data/todos.json');
+    fs.readFile(jsonPath, (err, data) => {
+        if (err) {
+            res.status(500).send(err);
+            return;
+        }
+        data = JSON.parse(data);
+        data = data.filter(x =>
+            x.title !== newTodo.title
+            && x.text !== newTodo.text
+            && x.date !== newTodo.date);
+
+        data = JSON.stringify(data);
+        fs.writeFile(jsonPath, data, err => {
+            if (err) {
+                res.status(500).send(err);
+                return;
+            } else
+                res.status(200).send('deleted');
+        });
+    });
+});
+
+app.put('/todos', (req, res) => {
+    console.log('/todos');
+    // const newTodo = req.body.newTodo;
+    // const oldTodo = req.body.oldTodo;
+    // if (!newTodo || !oldTodo)
+    //     res.status(400).send({message: 'text is required'});
+    //
+    // const jsonPath = path.resolve(__dirname, 'data/todos.json');
+    // fs.readFile(jsonPath, (err, data) => {
+    //     if (err) {
+    //         res.status(500).send(err);
+    //         return;
+    //     }
+    //     data = JSON.parse(data);
+    //     data.forEach((x, i) => {
+    //         if (x.title === newTodo.title
+    //             && x.text === newTodo.text
+    //             && x.date === newTodo.date)
+    //             data[i] = newTodo;
+    //     });
+    //
+    //     data = JSON.stringify(data);
+    //     fs.writeFile(jsonPath, data, err => {
+    //         if (err) {
+    //             res.status(500).send(err);
+    //         } else
+    //             res.status(200).send(newTodo);
+    //     });
+    // });
+});
+
+app.get('/', (req, res) => {
+    const jsonPath = path.resolve(__dirname, 'updateBooks.html');
+
+
+    res.render(jsonPath, {name: "hossein"});
+});
+
 app.get('/getTodo', (req, res) => {
 
     const jsonPath = path.resolve(__dirname, 'data/todos.json');
-    console.log(jsonPath);
-    const savesTodos = fs.readFile(jsonPath, (err, data) => {
+
+    fs.readFile(jsonPath, (err, data) => {
         if (err) {
             res.status(500).send(err);
             return;
@@ -67,10 +116,3 @@ app.get('/getTodo', (req, res) => {
         res.send(data);
     });
 });
-app.get('/', (req, res) => {
-    const jsonPath = path.resolve(__dirname, 'updateBooks.html');
-    console.log(jsonPath);
-
-    res.render(jsonPath,{name:"hossein"});
-});
-

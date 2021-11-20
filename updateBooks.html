@@ -1,4 +1,4 @@
-<html>
+<html xmlns:v-on="http://www.w3.org/1999/xhtml">
 <header>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -35,8 +35,9 @@
                     <td>{{todo.title}}</td>
                     <td>{{todo.date}}</td>
                     <td>{{todo.text}}</td>
+                    <td><a v-on:click="deleteTodo(todo)" class="btn text-danger btn-sm">Delete</a></td>
+                    <td><a v-on:click="updateTodo(todo)" class="btn text-warn btn-sm">update</a></td>
                 </tr>
-
                 </tbody>
             </table>
         </div>
@@ -48,15 +49,52 @@
     var model = new Vue({
         el: '#todo-table',
         data: {
-            todos: [
-                {title: 'One', text: 'todo one', date: '1991/01/02'},
-                {title: 'Two', text: 'todo two', date: '2020/01/02'},
-                {title: 'Three', text: 'todo tree', date: '2021/01/02'}]
+            todos: []
+        },
+        methods: {
+            deleteTodo: function (todo) {
+                $.ajax({
+                    url: "/todos",
+                    contentType: "application/json",
+                    data: JSON.stringify(todo),
+                    method: 'delete'
+                }).done(function () {
+                    gettodo();
+                }).fail(function (err) {
+                    console.log(err);
+                    alert(err);
+                })
+            },
+            updateTodo: function (oldTodo, newTodo) {
+                $.ajax({
+                    url: "/todos",
+                    contentType: "application/json",
+                    data: JSON.stringify({oldTodo, newTodo}),
+                    method: 'put'
+                }).done(function () {
+                    gettodo();
+                }).fail(function (err) {
+                    console.log(err);
+                    alert(err);
+                })
+            }
         }
     });
-
+    function updateTodo  (oldTodo, newTodo) {
+        $.ajax({
+            url: "/todos",
+            contentType: "application/json",
+            data: JSON.stringify({oldTodo, newTodo}),
+            method: 'put'
+        }).done(function () {
+            gettodo();
+        }).fail(function (err) {
+            console.log(err);
+            alert(err);
+        })
+    }
+    updateTodo({"text":"dfasdff","date":"fasdfas","title":"asdfasd"},{"text":"111","date":"22","title":"33"});
     function createTodo() {
-
         const todoText = $('#todo-text').val();
         const todoDate = $('#todo-date').val();
         const todoTitle = $('#todo-title').val();
@@ -78,10 +116,12 @@
     }
 
     function gettodo() {
+        console.log('gettodo');
         $.get('/getTodo', function (data) {
             model.todos = data;
         })
-            }
+    }
+
     gettodo();
 </script>
 </body>
