@@ -1,17 +1,79 @@
 <html>
-<script>
-const updateBook(oldSubject,newSubject)=>{
-      const xhttp= new XmlHttpRequest();
-      xhttp.open("GET","http://localhost:3000/getBooks/${oldSubject}/${newSubject}",false);
-      xhttp.send();
-}
-</script>
+<header>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</header>
 <body>
-	<h1>Get book </h1> 
-	   Enter Old Subject of the book:
-	   <input name="oldSubject" type="text">
-	   Enter New Subject of the book:
-	   <input name="newSubject" type="text">
-	   <buttun onclick="updateBook">Submit</button>
+
+<div class="container">
+    <header>
+        <h1>This is Node.js TODO app</h1>
+        <p>you can manage your daily task by this app</p>
+    </header>
+    <h1><%= name %></h1>
+    <div class="row">
+        <div class="col">
+            <form onsubmit="createTodo();return false;" autocomplete="off">
+                <div class="form-group">
+                    <label for="todo-title">Title</label>
+                    <input type="text" class="form-control" id="todo-title">
+                    <label for="todo-date">Date</label>
+                    <input type="text" class="form-control" id="todo-date">
+                    <label for="todo-text">Add Note</label>
+                    <input type="text" class="form-control" id="todo-text">
+                </div>
+                <button class=" btn btn-success">add</button>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <table class="table table-striped" id="todo-table">
+                <tbody>
+                <tr v-for="todo in todos">
+                    <td>{{todo.title}}</td>
+                    <td>{{todo.date}}</td>
+                    <td>{{todo.text}}</td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<script>
+    var model = new Vue({
+        el: '#todo-table',
+        data: {
+            todos: [
+                {title: 'One', text: 'todo one', date: '1991/01/02'},
+                {title: 'Two', text: 'todo two', date: '2020/01/02'},
+                {title: 'Three', text: 'todo tree', date: '2021/01/02'}]
+        }
+    });
+
+    function createTodo() {
+
+        const todoText = $('#todo-text').val();
+        const todoDate = $('#todo-date').val();
+        const todoTitle = $('#todo-title').val();
+
+        //validation
+        if (!todoText || !todoDate || !todoTitle) {
+            alert('you should enter correct data');
+            return;
+        }
+        // add data
+        model.todos.push({text: todoText, date: todoDate, title: todoTitle});
+        $('#todo-text').val('');
+        $('#todo-date').val('');
+        $('#todo-title').val('');
+
+    }
+</script>
 </body>
+
 </html>

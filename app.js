@@ -17,17 +17,24 @@ const books = [
 ];
 const express = require("express");
 const bodyParser = require('body-parser');
+const path = require('path');
+const fs = require('fs');
 const jsonParser = bodyParser.json();
 const app = express();
 const Port = process.env.PORT || 3000;
+app.engine('html', require('ejs').renderFile);
+
 app.listen(Port, () => {
     console.log("Server is ok");
 });
 app.get('/greeting', (req, res) => {
     res.send({hi: 'here'});
 });
-app.get('/', (req, res) => {
-    res.send({hi: 'Sweetheart'});
+app.get('/updateBooks', (req, res) => {
+    res.render(path.resolve(__dirname + '/updateBooks.html'), {
+        name: 'hossein',
+        data: ['yesterday', 'today', 'tomorrow']
+    });
 });
 
 app.get('/getBooks/:subject', (req, res, next) => {
@@ -53,11 +60,30 @@ app.put('/updateBook/:oldSubject/:newSubject', (req, res) => {
     }
 });
 
-app.post('/addBook',jsonParser, (req, res) => {
-    const newBook = req.body;
-    console.log( newBook);
-    books.push(newBook);
-    res.json(newBook);
+app.post('/addTodo', jsonParser, (req, res) => {
+    const newTodo = {text} = req.body;
+    if (!newTodo)
+        res.status(400).send({message: 'text is required'});
+
+    const jsonPath = path.resolve(__dirname, 'data/todos.json');
+    console.log(jsonPath);
+    const savesTodos = fs.readFile(jsonPath, (err, data) => {
+        if (err) {
+            res.status(500).send(err);
+            return;
+        }
+
+        data = JSON.parse(data);
+        data.push(newTodo);
+        data = JSON.stringify(data);
+        fs.writeFile(jsonPath, data, err => {
+            if (err) {
+                res.status(500).send(err);
+                return;
+            }
+            res.send(newTodo);
+        });
+    });
 });
 
 app.get('/displayAllBooks', (req, res) => {
